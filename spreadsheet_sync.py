@@ -30,13 +30,14 @@ def get_shops():
 
     # Find a workbook by name and open the first sheet
     # Make sure you use the right name here.
-    sheet = client.open("тест таблица").sheet1
+    sheet = client.open("Брокколи Партнер").sheet1
 
     full_list = sheet.get_all_values()
     shop_dict = {}
     i = 0
     while i < len(full_list[0]):
         shop_name = full_list[0][i]
+        chat_dict[shop_name] = int(full_list[1][i])
         shop_item_names = []
         for lst in full_list[2:]:
             if lst[i] != '':
