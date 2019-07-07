@@ -9,12 +9,12 @@ def webhook():
     if request.method == 'POST':
         dct = dict(request.form)
         print(dct)
-        import bot
+        import broccoli_bot
         try:
-            bot.process_order(dct)
+            broccoli_bot.process_order(dct)
             return '', 200
         except Exception as e:
-            bot_methods.send_message(bot.admins_id[0], repr(e))
+            bot_methods.send_message(broccoli_bot.admins_id[0], repr(e))
     else:
         abort(400)
 
