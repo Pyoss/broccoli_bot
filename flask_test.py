@@ -15,6 +15,7 @@ def webhook():
             return '', 200
         except Exception as e:
             bot_methods.send_message(broccoli_bot.admins_id[0], repr(e))
+            return '', 200
     else:
         abort(400)
 
