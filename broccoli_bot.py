@@ -6,7 +6,7 @@ import client_notification
 import datetime
 import flask_test
 
-admins_id = [197216910]
+admins_id = [197216910, 299335752, 248343219]
 
 
 bot = bot_methods.bot

@@ -3,7 +3,7 @@
 
 import telebot
 
-bot = telebot.TeleBot('777849028:AAFKdy8OJcLn37H7A8bJVsSCTSB-5S37zf4', threaded=False)
+bot = telebot.TeleBot('863065756:AAEizFJSuol4DDRNfOmiFcuPz8bleiTPNek', threaded=False)
 
 # Переопределение метода отправки сообщения (защита от ошибок)
 def send_message(chat_id, message, reply_markup=None, parse_mode=None):
