@@ -1,24 +1,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-chat_dict = {'Falafel Bro Маяковская': -262347442,
-             'Falafel Bro Марксистская': -373838315,
-             'Holy Vegan': -365554948,
-             'Rabbits Room': -361477504,
-             'Raw to go Депо': -396281204,
-             'SML Cafe': -321111085,
-             'Veganga + Сладенький': -301410097,
-             'Балифорния': -321104542,
-             'Добрая Кухня': -301838854,
-             'Зеленый Лис': -250723953,
-             'Ra Family': -397061161,
-             'Слайс Пицца': -167912698,
-             'Маллакто + FungFung': -293184099,
-             'VegU': -334936889,
-             'NYM Kitchen': -353559775,
-             'Угол': -222417832,
-             'Горох': -376544620,
-             'Мох Волна': -368218918}
+chat_dict = {}
 
 
 def get_shops():
