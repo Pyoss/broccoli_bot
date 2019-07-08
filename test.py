@@ -250,7 +250,7 @@ class BucketForShops:
                          callback_data='client_notice' if not self.client_noticed and not client_sent else 'client_sent')
                      )
         keyboard.add(telebot.types.InlineKeyboardButton(text='Открыть страницу заказа',
-                                                        url='http://taplink.cc/vegandelivery/m/'))
+                                                        url='https://taplink.cc/brodelivery.ru'))
         return keyboard
 
     def reply_to_store(self, call):
