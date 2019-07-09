@@ -114,7 +114,7 @@ class Order:
             return StringMessage(30, 'Комментарий: {}'.format(value))
         elif key == 'Мне нужны приборы':
             return StringMessage(35, 'Мне нужны приборы: {}'.format('Да' if value != 'false' and value != '0' and value != '' and value != 'Пусто' else 'Нет'))
-        elif key == 'Сколько приборов вам положить?':
+        elif key == 'Сколько приборов Вам положить':
             return StringMessage(40, 'Количество приборов: {}'.format(value))
         elif key == 'Я хочу, чтобы мне подтвердили заказ через:':
             return StringMessage(45, 'Я хочу, чтобы мне подтвердили заказ через: {}'.format(value))
