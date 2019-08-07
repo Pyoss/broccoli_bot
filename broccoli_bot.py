@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import telebot
 import bot_methods
 import test
