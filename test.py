@@ -108,7 +108,7 @@ class Order:
             return StringMessage(15, 'Тип здания: {}'.format(value))
         elif key == 'Заказ на ближайшее возможное время':
             return StringMessage(20, 'Заказ на ближайшее возможное время: {}'.format('Да' if value != 'false' and value != '0' and value != '' and value != 'Пусто' else 'Нет'))
-        elif key == 'Временное интервал доставки':
+        elif key == 'Временной интервал доставки':
             return StringMessage(25, 'Временной интервал доставки: {}'.format(value))
         elif key == 'Комментарий':
             return StringMessage(30, 'Комментарий: {}'.format(value))
