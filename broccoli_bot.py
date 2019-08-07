@@ -31,7 +31,7 @@ def process_order(datadict):
             print(way, phone, text, name)
             if way == 'Telegram':
                 print(way)
-                cn = client_notification.Client_Notice('Здравствуйте, {}! '
+                cn = client_notification.Client_Notice('Здравствуйте, {}!'
                                                        '\nСпасибо за Ваш заказ! ✨ '
                                                        '\nМы работаем ежедневно с 9 до 21, поэтому сейчас наш менеджер не на связи. Мы напишем Вам завтра ☀️ Доброй ночи! 🌌'.format(
                     order.client_name), phone, name)
