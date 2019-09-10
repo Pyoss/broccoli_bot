@@ -8,7 +8,6 @@ import flask_test
 
 admins_id = [197216910, 248343219]
 
-
 bot = bot_methods.bot
 
 types = telebot.types

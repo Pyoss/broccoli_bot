@@ -3,7 +3,12 @@
 
 import telebot
 
-bot = telebot.TeleBot('863065756:AAEizFJSuol4DDRNfOmiFcuPz8bleiTPNek', threaded=False)
+
+class WatcherBot(telebot.TeleBot):
+    def __del__(self):
+        self.send_message(197216910, 'Пап, я всё')
+
+bot = WatcherBot('863065756:AAEizFJSuol4DDRNfOmiFcuPz8bleiTPNek', threaded=False)
 
 # Переопределение метода отправки сообщения (защита от ошибок)
 def send_message(chat_id, message, reply_markup=None, parse_mode=None):
