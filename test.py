@@ -224,14 +224,14 @@ class BucketForShops:
         else:
             self.client_noticed = False
         if 'Товары' in order_text:
-            goods_string = order_text[order_text.index('Товары:\n') + len('Товары:\n'):]
+            goods_string = order_text[order_text.index('Товары') + len('Товары:\n'):]
             goods_data = [item.split('\n-------------\n') for item in goods_string.split('\n\n') if '-------------' in item]
             self.goods_dict = {item[0].replace(' (❗Нет телеграмма)', ''): item[1] for item in goods_data}
             self.price_dict = {item[0].replace(' (❗Нет телеграмма)', ''): self.get_sum(item[1]) for item in goods_data}
         self.check_num = order_text[order_text.index('Счет: №') + len('Счет: №'):].split()[0]
-        self.phone = order_text[order_text.index('Телефон:') + len('Телефон:'):].split()[0]
-        self.name = order_text[order_text.index('Имя: ') + len('Имя: '):order_text.index('\nТелефон:')]
-        self.contact = order_text[order_text.index('Я хочу, чтобы мне подтвердили заказ через:') + len('Я хочу, чтобы мне подтвердили заказ через:'):].split()[0]
+        self.phone = order_text[order_text.index('Телефон:') + len('Телефон:'):].split()[0] if 'Телефон:' in order_text else 'None'
+        self.name = order_text[order_text.index('Имя: ') + len('Имя: '):order_text.index('\nТелефон:')]  if 'Телефон:' in order_text and 'Имя: ' in order_text else 'None'
+        self.contact = order_text[order_text.index('Я хочу, чтобы мне подтвердили заказ через:') + len('Я хочу, чтобы мне подтвердили заказ через:'):].split()[0] if 'Я хочу, чтобы мне подтвердили заказ через:' in order_text else None
 
     def get_sum(self, item_list):
         strings = item_list.split('\n')
