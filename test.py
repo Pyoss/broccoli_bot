@@ -99,7 +99,7 @@ class Order:
 
     def add_string_to_message(self, key, value):
         value = 'Пусто' if not value else value
-        if key == 'Имя':
+        if key == 'Имя' and not any(string_message.order == 5 for string_message in self.working_list):
             self.client_name = value
             return StringMessage(5, 'Имя: {}'.format(value))
         elif key == 'phone':
