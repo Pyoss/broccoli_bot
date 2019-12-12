@@ -232,16 +232,16 @@ def start_stoplist_loop():
         notified = False
         while True:
             x = datetime.now()
-            if x.hour == 6 and not notified:
-                for value in spreadsheet_sync.chat_dict.values():
-                    message = 'Доброе утро! ☀\n' \
-                              'Уважаемые коллеги, просим вас актуализировать ⛔️стоп-лист к моменту вашего открытия. 🕒\n\n'\
-                              'Для того, чтобы вызвать меню стоп-листов, пожалуйста, используйте команду /stoplist\n\n'\
-                              'Желаем вам продуктивного дня 🍀'
-                    bot_methods.send_message(value, message)
-                notified = True
-            elif x.hour == 7 and notified:
-                notified = False
+           # if x.hour == 6 and not notified:
+           #     for value in spreadsheet_sync.chat_dict.values():
+           #         message = 'Доброе утро! ☀\n' \
+           #                   'Уважаемые коллеги, просим вас актуализировать ⛔️стоп-лист к моменту вашего открытия. 🕒\n\n'\
+           #                   'Для того, чтобы вызвать меню стоп-листов, пожалуйста, используйте команду /stoplist\n\n'\
+           #                   'Желаем вам продуктивного дня 🍀'
+           #         bot_methods.send_message(value, message)
+           #     notified = True
+           # elif x.hour == 7 and notified:
+           #     notified = False
             try:
                 if pending_stoplist or pending_releases:
                     driver = check_login()
