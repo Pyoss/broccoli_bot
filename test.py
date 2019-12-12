@@ -6,6 +6,7 @@ import spreadsheet_sync
 import math
 import pickle
 import bot_methods
+import selenium_main
 
 redacting_stoplists = {}
 
