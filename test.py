@@ -7,6 +7,8 @@ import math
 import pickle
 import bot_methods
 
+redacting_stoplists = {}
+
 
 class HookData:
     def __init__(self, request_form_dict):
