@@ -19,14 +19,17 @@ def get_shops():
     shop_dict = {}
     i = 0
     while i < len(full_list[0]):
-        shop_name = full_list[0][i]
-        chat_dict[shop_name] = int(full_list[1][i])
-        shop_item_names = []
-        for lst in full_list[2:]:
-            if lst[i] != '':
-                shop_item_names.append(lst[i])
-        shop_dict[shop_name] = shop_item_names
-        i += 1
+        try:
+            shop_name = full_list[0][i]
+            chat_dict[shop_name] = int(full_list[1][i])
+            shop_item_names = []
+            for lst in full_list[2:]:
+                if lst[i] != '':
+                    shop_item_names.append(lst[i])
+            shop_dict[shop_name] = shop_item_names
+            i += 1
+        except:
+            i += 1
     return shop_dict
 
 goods_dict = get_shops()

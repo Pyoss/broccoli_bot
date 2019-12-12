@@ -4,6 +4,8 @@
 import telebot
 import spreadsheet_sync
 import math
+import pickle
+import bot_methods
 
 
 class HookData:
@@ -319,5 +321,100 @@ class StringMessage:
         self.message = message
 
 
-new_dict = {'data[order_number]': ['303'], 'data[date_created]': ['2019-04-25'], 'data[order][budget]': ['1400'], 'data[order][purpose]': ['@vegandelivery'], 'data[purpose]': ['@vegandelivery'], 'data[order][order_id]': ['653276'], 'data[shipping_fields][1][value]': ['12'], 'data[records][1][value]': ['79296052405'], 'data[offers][1][title]': ['Сэндвич с авокадо и черникой'], 'data[records][5][title]': ['Я хочу, чтобы мне подтвердили заказ через:'], 'data[records][5][value]': ['Telegram'], 'data[order_version]': ['0'], 'data[currency_code]': ['RUB'], 'data[shipping_fields][0][title]': ['Опции доставки'], 'data[order][order_status_id]': ['1'], 'data[records][2][type]': ['9'], 'data[order][tms_modify]': ['2019-04-25 22:45:34'], 'data[utm_campaign]': [''], 'data[records][5][type]': ['8'], 'data[offers][0][amount]': ['2'], 'data[email]': [''], 'data[shipping_fields][1][key]': ['addr1'], 'data[offers][1][amount]': ['1'], 'data[shipping_fields][0][key]': ['shipping_method'], 'data[utm_medium]': [''], 'data[records][6][type]': ['9'], 'data[page_link]': ['http://taplink.cc/vegandelivery/m/'], 'data[offers][1][offer_id]': ['981302'], 'data[block_id]': [''], 'data[utm_term]': [''], 'data[currency_title]': ['₽'], 'data[records][2][title]': ['Тип здания'], 'data[records][2][value]': ['Бизнес-центр'], 'data[records][3][value]': ['1'], 'data[records][3][type]': ['10'], 'data[records][0][value]': ['Тест Бота'], 'data[shipping_fields][1][title]': ['Адрес'], 'data[phone]': ['79296052405'], 'data[tms_created]': ['2019-04-25 22:45:34'], 'data[records][6][title]': ['Форма оплаты'], 'data[order][currency_code]': ['RUB'], 'data[offers][0][price]': ['350'], 'data[offers][1][budget]': ['350'], 'data[offers][0][offer_id]': ['981300'], 'data[order_id]': ['653276'], 'action': ['leads.created'], 'data[tms_modify]': ['2019-04-25 22:45:34'], 'data[shipping_price]': ['350'], 'data[utm_source]': [''], 'data[offers][1][weight]': ['0.175'], 'data[ip]': ['5.35.108.149'], 'data[order][order_version]': ['0'], 'data[page_title]': ['Товары'], 'data[fullname]': ['Тест Тестович'], 'data[records][1][title]': ['Телефон'], 'data[profile_id]': ['845465'], 'data[order_status_id]': ['1'], 'data[records][1][type]': ['7'], 'data[offers][1][price]': ['350'], 'data[nickname]': ['vegandelivery'], 'data[offers][0][budget]': ['700'], 'data[lead_id]': ['966714'], 'data[shipping_fields][0][value]': ['Платная доставка (точную сумму подскажет менеджер)'], 'data[offers][0][title]': ['Сэндвич фиолетовый хумус'], 'data[records][4][value]': ['1'], 'data[budget]': ['1400'], 'data[records][4][type]': ['10'], 'data[records][4][title]': ['Мне нужны приборы'], 'data[records][6][value]': ['Наличный'], 'data[order][currency_title]': ['₽'], 'data[lead_number]': ['303'], 'data[records][0][type]': ['3'], 'data[order][order_number]': ['303'], 'data[offers][0][weight]': ['0.155'], 'data[records][3][title]': ['Заказ на ближайшее возможное время'], 'data[contact_id]': ['700510'], 'data[records][0][title]': ['Имя']}
+class StopList:
+    def __init__(self, chat_id, admin_mode=False):
+        spreadsheet_sync.get_shops()
+        self.name = next(key for key, value in spreadsheet_sync.chat_dict.items() if value == chat_id)
+        self.goods = spreadsheet_sync.goods_dict[self.name]
+        with open('stoplist.pkl', 'rb') as f:
+            self.stop_list = pickle.load(f)
+        self.banned_goods = [item for item in self.goods if item in self.stop_list]
+        self.unbanned_goods = []
+        self.pages = list(self.form_pages(9))
+        self.admin_mode = admin_mode
+        self.chat_id = chat_id if not admin_mode else 197216910
+
+    def form_pages(self, n):
+        for i in range(0, len(self.goods), n):
+            # Create an index range for l of n items:
+            yield self.goods[i:i + n]
+
+    def send_stop_list_page(self, page_num, message_id=None):
+        page = self.pages[page_num]
+        keyboard = telebot.types.InlineKeyboardMarkup()
+        for good in page:
+            if good not in self.banned_goods:
+                keyboard.add(telebot.types.InlineKeyboardButton(text='\n{} {}'.format('✅',  good[:45]),
+                                                                callback_data='stoplist_ban_' + str(self.goods.index(good)) + '_' + str(page_num)))
+            else:
+                keyboard.add(telebot.types.InlineKeyboardButton(text='\n{} {}'.format('⛔️', good[:45]),
+                                                                callback_data='stoplist_unban_' + str(self.goods.index(good)) + '_' + str(page_num)))
+        buttons = []
+        if page_num > 0:
+            buttons.append(telebot.types.InlineKeyboardButton(text='⬅️', callback_data='stoplist_page_' + str(page_num-1)))
+        else:
+            buttons.append(telebot.types.InlineKeyboardButton(text='⏺', callback_data='-'))
+        buttons.append(telebot.types.InlineKeyboardButton(text='стр.' + str(page_num + 1), callback_data='-'))
+        if len(self.pages) - 1 > page_num:
+            buttons.append(telebot.types.InlineKeyboardButton(text='➡️', callback_data='stoplist_page_' + str(page_num+1)))
+        else:
+            buttons.append(telebot.types.InlineKeyboardButton(text='⏺', callback_data='-'))
+        keyboard.add(*buttons)
+        keyboard.add(telebot.types.InlineKeyboardButton(text='Принять',
+                                                        callback_data='stoplist_commit'))
+        text = 'Редактирование стоплиста "{}"'.format(self.name)
+
+        if message_id is None:
+            bot_methods.send_message(self.chat_id, text, reply_markup=keyboard)
+        else:
+            bot_methods.edit_message(self.chat_id, message_id, text, reply_markup=keyboard)
+
+    def ban_item(self, index):
+        item = self.goods[index]
+        if item not in self.banned_goods:
+            self.banned_goods.append(item)
+        if item in self.unbanned_goods:
+            self.unbanned_goods.remove(item)
+
+    def unban_good(self, index):
+        item = self.goods[index]
+        if item in self.banned_goods:
+            self.banned_goods.remove(item)
+            self.unbanned_goods.append(item)
+
+    def process_callback(self, call):
+        call_data = call.data.split('_')
+        if call_data[1] == 'page':
+            page_num = int(call_data[2])
+            self.send_stop_list_page(page_num, message_id=call.message.message_id)
+        elif call_data[1] == 'ban':
+            page_num = int(call_data[-1])
+            item_index = int(call_data[-2])
+            self.ban_item(item_index)
+            self.send_stop_list_page(page_num, message_id=call.message.message_id)
+        elif call_data[1] == 'unban':
+            page_num = int(call_data[-1])
+            item_index = int(call_data[-2])
+            self.unban_good(item_index)
+            self.send_stop_list_page(page_num, message_id=call.message.message_id)
+        elif call_data[1] == 'commit':
+            self.commit(call)
+
+    def commit(self, call):
+        message = 'Изменения стоп-листа приняты.\n'
+        self.banned_goods = [item for item in self.banned_goods if item not in self.stop_list]
+        if self.banned_goods:
+            selenium_main.pending_stoplist.append(self.banned_goods)
+            message += '\nТовары в стоп-листе:\n'
+            for item in self.banned_goods:
+                message += '   ' + str(item) + '\n'
+        if self.unbanned_goods:
+            selenium_main.pending_releases.append(self.unbanned_goods)
+            selenium_main.pending_stoplist.append(self.banned_goods)
+            message += '\nИз стоп-листа удалены:\n'
+            for item in self.unbanned_goods:
+                message += '   ' + str(item) + '\n'
+
+        bot_methods.edit_message(self.chat_id, call.message.message_id, message)
+        del redacting_stoplists[self.chat_id]
 
