@@ -29,14 +29,14 @@ def process_order(datadict):
 
     try:
         now = datetime.datetime.now().hour
-        if 6 > now or now > 18:
+        if 7 > now or now > 18:
             way, phone, text, name = order_data.get_notice()
             print(way, phone, text, name)
             if way == 'Telegram':
                 print(way)
                 cn = client_notification.Client_Notice('Здравствуйте, {}!'
                                                        '\nСпасибо за Ваш заказ! ✨ '
-                                                       '\nМы работаем ежедневно с 9 до 21, поэтому сейчас наш менеджер не на связи. Мы напишем Вам завтра ☀️ Доброй ночи! 🌌'.format(
+                                                       '\nМы работаем ежедневно с 10 до 21, поэтому сейчас наш менеджер не на связи. Мы напишем Вам завтра ☀️ Доброй ночи! 🌌'.format(
                     order.client_name), phone, name)
                 bot.queued_processes.append(cn.pulled_notice)
     except Exception as e:
