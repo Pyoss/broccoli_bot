@@ -164,6 +164,7 @@ class Order:
     def form_bucket(self):
         bucket_list = self.dict['offers']
         item_list = []
+        spreadsheet_sync.goods_dict = spreadsheet_sync.get_shops()
         shop_dict = spreadsheet_sync.goods_dict
         for item in bucket_list:
             self.weight += float(item['weight']) * int(item['amount'])
@@ -326,7 +327,8 @@ class StringMessage:
 
 class StopList:
     def __init__(self, chat_id, admin_mode=False):
-        spreadsheet_sync.get_shops()
+        
+        spreadsheet_sync.goods_dict = spreadsheet_sync.get_shops()
         self.name = next(key for key, value in spreadsheet_sync.chat_dict.items() if value == chat_id)
         self.goods = spreadsheet_sync.goods_dict[self.name]
         with open('stoplist.pkl', 'rb') as f:
