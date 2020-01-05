@@ -29,7 +29,7 @@ def process_order(datadict):
 
     try:
         now = datetime.datetime.now().hour
-        if 7 > now or now > 18:
+        if 6 > now or now > 19:
             way, phone, text, name = order_data.get_notice()
             print(way, phone, text, name)
             if way == 'Telegram':
